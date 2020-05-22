@@ -17,6 +17,7 @@ package org.tensorflow.lite.examples.classification.customview;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -60,10 +61,8 @@ public class RecognitionScoreView extends View implements ResultsView {
 
     if (results != null) {
       Log.d("DEBUG", "Result is not null!");
-      for (final Recognition recog : results) {
-        canvas.drawText(recog.getTitle() + ": " + recog.getConfidence(), x, y, fgPaint);
-        y += (int) (fgPaint.getTextSize() * 1.5f);
-      }
+      final Recognition recog = results.get(0);
+      canvas.drawText(recog.getTitle() + ": " + recog.getConfidence(), 10, y, fgPaint);
     }
   }
 }

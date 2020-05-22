@@ -20,6 +20,7 @@ import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
@@ -37,6 +38,9 @@ import android.os.Trace;
 import androidx.annotation.NonNull;
 import androidx.annotation.UiThread;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import android.util.Log;
 import android.util.Size;
 import android.view.Surface;
 import android.view.View;
@@ -520,15 +524,54 @@ public abstract class CameraActivity extends AppCompatActivity
     }
   }
 
+//  @UiThread
+//  private void setRecognitionTextView(Recognition recognition) {
+//    String title = recognition.getTitle();
+//    float confidence = recognition.getConfidence();
+//    if (confidence < 0.6) {
+//      recognitionTextView.setText("-");
+//    } else {
+//      recognitionTextView.setText(title);
+//      if (title == "Mask") {
+//        recognitionTextView.setTextColor(0x00FF00);
+//      } else {
+//        recognitionTextView.setTextColor(0xFF0000);
+//      }
+//    }
+//  }
+
   @UiThread
   protected void showResultsInBottomSheet(List<Recognition> results) {
     if (results != null) {
       Recognition recognition = results.get(0);
       if (recognition != null) {
-        if (recognition.getTitle() != null) recognitionTextView.setText(recognition.getTitle());
-        if (recognition.getConfidence() != null)
-          recognitionValueTextView.setText(
-              String.format("%.2f", (100 * recognition.getConfidence())) + "%");
+        if (recognition.getTitle() != null && recognition.getConfidence() != null) {
+          String title = recognition.getTitle();
+          float confidence = recognition.getConfidence();
+          if (confidence < 0.6) {
+            recognitionTextView.setText("---");
+            recognitionTextView.setTextColor(getResources().getColor(R.color.tfe_color_unconfident));
+            Log.d("COLOR",
+                    "Should be black: " + String.valueOf(
+                            recognitionTextView.getCurrentTextColor()) +  " Title: " + title);
+            recognitionValueTextView.setText("---");
+          } else {
+            recognitionTextView.setText(title);
+            if (title.equals("Mask")) {
+              recognitionTextView.setTextColor(getResources().getColor(R.color.tfe_color_success));
+              Log.d("COLOR",
+                      "Should be green: " + String.valueOf(
+                              recognitionTextView.getCurrentTextColor()) +  " Title: " + title);
+            } else {
+              recognitionTextView.setTextColor(getResources().getColor(R.color.tfe_color_failure));
+              Log.d("COLOR",
+                      "Should be red: " + String.valueOf(
+                              recognitionTextView.getCurrentTextColor()) +  " Title: " + title);
+            }
+            recognitionValueTextView.setText(
+                    String.format("%.2f", (100 * recognition.getConfidence())) + "%");
+          }
+        }
       }
 
 //      Recognition recognition1 = results.get(1);
