@@ -18,10 +18,14 @@ package org.tensorflow.lite.examples.classification.tflite;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.RectF;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.os.Trace;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
@@ -292,13 +296,13 @@ public abstract class Classifier {
 
     // Creates processor for the TensorImage.
     int cropSize = Math.min(bitmap.getWidth(), bitmap.getHeight());
-    int numRotation = sensorOrientation / 90;
+    // int numRotation = sensorOrientation / 90;
     // TODO(b/143564309): Fuse ops inside ImageProcessor.
     ImageProcessor imageProcessor =
         new ImageProcessor.Builder()
             .add(new ResizeWithCropOrPadOp(cropSize, cropSize))
             .add(new ResizeOp(imageSizeX, imageSizeY, ResizeMethod.NEAREST_NEIGHBOR))
-            .add(new Rot90Op(numRotation))
+            .add(new Rot90Op(3))
             .add(getPreprocessNormalizeOp())
             .build();
     return imageProcessor.process(inputImageBuffer);

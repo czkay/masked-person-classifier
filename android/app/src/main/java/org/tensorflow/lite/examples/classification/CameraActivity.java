@@ -512,7 +512,9 @@ public abstract class CameraActivity extends AppCompatActivity
   }
 
   protected int getScreenOrientation() {
-    switch (getWindowManager().getDefaultDisplay().getRotation()) {
+    int rotation = getWindowManager().getDefaultDisplay().getRotation();
+    Log.d("ORIENTATION", String.valueOf(rotation));
+    switch (rotation) {
       case Surface.ROTATION_270:
         return 270;
       case Surface.ROTATION_180:

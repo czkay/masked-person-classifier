@@ -21,6 +21,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Typeface;
 import android.media.ImageReader.OnImageAvailableListener;
 import android.os.SystemClock;
+import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
 import android.widget.Toast;
@@ -74,6 +75,7 @@ public class ClassifierActivity extends CameraActivity implements OnImageAvailab
     previewHeight = size.getHeight();
 
     sensorOrientation = rotation - getScreenOrientation();
+    Log.d("ORIENTATION", "Camera orientation relative to screen canvas: " + String.valueOf(sensorOrientation));
     LOGGER.i("Camera orientation relative to screen canvas: %d", sensorOrientation);
 
     LOGGER.i("Initializing at size %dx%d", previewWidth, previewHeight);
